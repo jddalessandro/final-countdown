@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOOMSDAY COUNTDOWN</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: black;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+    }
+
+    #countdown-container {
+      text-align: center;
+      perspective: 1000px;
+    }
+
+    #timer {
+      font-size: 5rem;
+      color: #ff0000;
+      text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+      letter-spacing: 10px;
+      font-weight: bold;
+    }
+
+    #warning {
+      color: red;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    #fuse {
+      width: 200px;
+      height: 10px;
+      background: linear-gradient(to right, #ff9900, #ff0000);
+      margin: 20px auto;
+      animation: burn 1s infinite;
+    }
+
+    @keyframes burn {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="countdown-container">
+    <div id="warning">AP COUNTDOWN TO DOOMSDAY</div>
+    <div id="fuse"></div>
+    <div id="timer">00:00:00</div>
+  </div>
+
+  <script>
+    const targetDate = new Date('2025-11-10T17:00:00-05:00');
+
+    function updateTimer() {
+      const now = new Date();
+      const difference = targetDate.getTime() - now.getTime();
+
+      if (difference <= 0) {
+        document.body.innerHTML = `
+                    <div style="color: red; font-size: 4rem; text-align: center;">
+                        SYSTEM TERMINATED
+                    </div>
+                `;
+        return;
+      }
+
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+      const formatTime = (num) => num.toString().padStart(2, '0');
+
+      document.getElementById('timer').textContent =
+        `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+    }
+
+    // Initial call
+    updateTimer();
+
+    // Update every second
+    setInterval(updateTimer, 1000);
+  </script>
+</body>
+
+</html>
